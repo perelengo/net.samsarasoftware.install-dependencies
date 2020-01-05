@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.samsarasoftware</groupId>
+	<artifactId>net.samsarasoftware.install-dependencies</artifactId>
+	<version>0.2.0-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
+	<properties>
+		<tycho.version>1.0.0</tycho.version>
+		<eclipse-site>http://download.eclipse.org/releases/mars</eclipse-site>
+		<platform-version>[4.5)</platform-version>
+		<project.scm.id>git.samsara-software.es</project.scm.id>
+	</properties>
+	<repositories>
+		<repository>
+			<id>eclipse-platform</id>
+			<layout>p2</layout>
+			<url>${eclipse-site}</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					<pomDependencies>consider</pomDependencies>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>attach-source</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+
+				<configuration>
+					<strictVersions>false</strictVersions>
+				</configuration>
+
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+
+					<execution>
+						<id>install-plugins</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<addParentPoms>true</addParentPoms>
+							<includeGroupIds>p2.eclipse-plugin</includeGroupIds>
+							<copyPom>true</copyPom>
+							<includeTypes>jar</includeTypes>
+							<outputDirectory>${M2_REPO}</outputDirectory>
+							<useRepositoryLayout>true</useRepositoryLayout>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+			<plugin>
+				<groupId>net.samsarasoftware</groupId>
+				<artifactId>tycho-versions-plugin</artifactId>
+				<version>0.1.0</version>
+				<executions>
+					<execution>
+						<id>versions</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>synchronize-version</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy licenses</id>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${env.SAMSARASOFTWARE_WORKSPACE_DIR}/net.samsarasoftware/src/license/</directory>
+									<include>THIRD-PARTY.properties</include>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+							<outputDirectory>src/license</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>flatten-maven-plugin</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+					</configuration>
+					<executions>
+						<!-- enable flattening -->
+						<execution>
+							<id>flatten.process</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>flatten</goal>
+							</goals>
+							<configuration>
+								<pomElements>
+									<name />
+									<description />
+									<url />
+									<inceptionYear />
+									<organization />
+									<developers />
+									<contributors />
+									<mailingLists />
+									<pluginRepositories />
+									<parent />
+									<dependencyManagement />
+									<properties />
+									<modules />
+								</pomElements>
+								<updatePomFile>true</updatePomFile>
+							</configuration>
+						</execution>
+						<!-- ensure proper cleanup -->
+						<execution>
+							<id>flatten.clean</id>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<extensions>
+			<!-- Enabling the use of SSH -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>2.12</version>
+			</extension>
+		</extensions>
+
+	</build>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git.samsara-software.es:50050/opt/git/net.samsarasoftware.git</developerConnection>
+		<tag>net.samsarasoftware-0.1.0</tag>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<id>maven3.samsara-software.es</id>
+			<url>scpexe://maven3.samsara-software.es:50050/var/www/vhosts/samsara-software.es/maven3.samsara-software.es/repository</url>
+		</repository>
+	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>publish</id>
+			<activation>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>flatten-maven-plugin</artifactId>
+						<version>1.0.0</version>
+						<configuration>
+						</configuration>
+						<executions>
+							<!-- enable flattening -->
+							<execution>
+								<id>flatten.process</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>flatten</goal>
+								</goals>
+								<configuration>
+									<pomElements>
+										<name />
+										<description />
+										<url />
+										<inceptionYear />
+										<organization />
+										<developers />
+										<contributors />
+										<mailingLists />
+										<pluginRepositories />
+										<parent />
+										<dependencyManagement />
+										<properties />
+										<modules />
+									</pomElements>
+									<updatePomFile>true</updatePomFile>
+								</configuration>
+							</execution>
+							<!-- ensure proper cleanup -->
+							<execution>
+								<id>flatten.clean</id>
+								<phase>clean</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
