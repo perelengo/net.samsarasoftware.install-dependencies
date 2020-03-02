@@ -4,7 +4,7 @@
 
 	<groupId>net.samsarasoftware</groupId>
 	<artifactId>net.samsarasoftware.install-dependencies</artifactId>
-	<version>0.2.0</version>
+	<version>0.2.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
 		<tycho.version>1.0.0</tycho.version>
@@ -189,7 +189,7 @@
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/perelengo/net.samsarasoftware.install-dependencies.git</developerConnection>
-	  <tag>net.samsarasoftware.install-dependencies-0.2.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<distributionManagement>
 		<repository>
